@@ -1,6 +1,9 @@
-function Mapka(containerId, paths, call){
-  this.call = call;
+function Mapka(containerId, paths, callOnClick, callOnHoverIn, callOnHoverOut){
+  this.callOnClick = callOnClick;
+  this.callOnHoverIn = callOnHoverIn;
+  this.callOnHoverOut = callOnHoverOut;
   this.clickedElement = null;
+  this.hoverElement = null;
   this.elements = new Array();
   this.staticColor = '#ff0';
   this.clickColor = '#f00';
@@ -27,7 +30,7 @@ function Mapka(containerId, paths, call){
     if(containerScaleFactor > scaleFactor){
       scaleX = scaleX * k;
       translateDeltaW = (this.containerW - this.containerH * scaleFactor) / scaleX;
-      translateX = translateX + translateDeltaW/2;      
+      translateX = translateX + translateDeltaW/2;
       borderWidth = borderWidth * scaleY;
     }else {
       scaleY = scaleY / k;
@@ -51,6 +54,8 @@ function Mapka(containerId, paths, call){
     for (var path in this.paths) {
       var obj = this.r.path(paths[path].path);
       obj.attr(attributes);
+      obj.firstId = paths.firstId;
+      obj.secondId = paths[path].secondId;
       obj.name = paths[path].name;
       obj.mapka = this;
       this.elements.push(obj);
@@ -67,12 +72,14 @@ function Mapka(containerId, paths, call){
                   fill: this.mapka.hoverColor
               }, 300);
           }
+          this.mapka.callOnHoverIn(this);
         }, function(){
           if(this.mapka.clickedElement === null || this.mapka.clickedElement.id !== this.id){
             this.animate({
                 fill: this.mapka.staticColor
             }, 300);
           }
+          this.mapka.callOnHoverOut(this);
         })
         .click(function(){
           if(this.mapka.clickedElement !== null){
@@ -85,7 +92,7 @@ function Mapka(containerId, paths, call){
           this.attr({
               fill: this.mapka.clickColor
           });
-          this.mapka.call(this.name);
+          this.mapka.callOnClick(this.mapka.clickedElement);
         })
         .scale(this.scaleX, this.scaleY,1,1)
         .translate(this.translateX, this.translateY);
