@@ -17,7 +17,7 @@ function Mapka(containerId, paths, callOnClick, callOnHoverIn, callOnHoverOut){
   this.containerH = $('#' + this.containerId).height();
   this.r = Raphael(this.containerId, this.containerW, this.containerH);
 
-  this.parsePaths = function(){
+  this.parsePaths = function(paths){
     scaleFactor = paths.scaleFactor;
     containerScaleFactor = this.containerW/this.containerH;
     scaleX = paths.scaleFactorX * this.containerW;
@@ -51,7 +51,7 @@ function Mapka(containerId, paths, callOnClick, callOnHoverIn, callOnHoverOut){
     this.translateX = translateX;
     this.translateY = translateY;
 
-    for (var path in this.paths) {
+    for (var path in paths) {
       var obj = this.r.path(paths[path].path);
       obj.attr(attributes);
       obj.firstId = paths.firstId;
@@ -62,8 +62,24 @@ function Mapka(containerId, paths, callOnClick, callOnHoverIn, callOnHoverOut){
     }
   };
 
+  this.parseById = function(id){
+      if(id != null && id.toUpperCase() == 'EU'){
+        this.parsePaths(this.paths);
+      }else{
+        for (var path in this.paths) {
+          isPathExist = typeof this.paths[path].regions != 'undefined';
+          if(isPathExist && this.paths[path].secondId == id){
+              console.log(this.paths[path].secondId);
+              this.parsePaths(this.paths[path].regions);
+              return;
+          }
+        }
+      }
+      this.parsePaths(this.paths);
+  };
+
   this.generation = function(){
-    this.parsePaths();
+    this.parseById(arguments[0]);
     for (var element of this.elements) {
       element
         .hover(function(){
