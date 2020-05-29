@@ -1,3 +1,43 @@
+var clickedElement = '';
+var country = null;
+var region = null;
+var word = null;
+$(function(){
+  word = window.location.hash;
+  if(word == null || word != '#cotam'){
+    $("#text").html("").html('wrong magic word');
+  }else{
+    var drawMapka =  function(){
+      var mapka = new Mapka('map1', paths, callOnClick,callOnHoverIn,callOnHoverOut);
+      mapka.generation(clickedElement.secondId);
+    }
+    var callOnClick = function(obj){
+        clickedElement = obj;
+        if(obj.firstId.toUpperCase() == 'EU'){
+          country = obj;
+          region = null;
+          $("#map1").html("");
+          drawMapka();
+        }else{
+          region = obj;
+        }
+        if(country != null){
+          $("#text").html(country.name);
+        }
+        if(region != null){
+          $("#text").html(country.name + ' - '+ region.name);
+        }
+    };
+    var callOnHoverIn = function(obj){
+    };
+
+    var callOnHoverOut = function(obj){
+    };
+    var mapka = new Mapka('map0', paths, callOnClick,callOnHoverIn,callOnHoverOut);
+    mapka.generation();
+  }
+});
+
 function Mapka(containerId, paths, callOnClick, callOnHoverIn, callOnHoverOut){
   this.callOnClick = callOnClick;
   this.callOnHoverIn = callOnHoverIn;
