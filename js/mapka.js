@@ -5,11 +5,11 @@ function Mapka(containerId, paths, callOnClick, callOnHoverIn, callOnHoverOut){
   this.clickedElement = null;
   this.hoverElement = null;
   this.elements = new Array();
-  this.staticColor = '#ff0';
-  this.clickColor = '#f00';
-  this.hoverColor = this.clickColor;
-  this.borderColor = '#3899E6';
-  this.borderWidth = 1;
+  this.staticColor = '#f5f5f5';
+  this.clickColor = '#c7c7c7';
+  this.hoverColor = '#c7c7c7';
+  this.borderColor = '#c7c7c7';
+  this.borderWidth = 1.5;
 
   this.containerId = containerId;
   this.paths = paths;
@@ -24,7 +24,7 @@ function Mapka(containerId, paths, callOnClick, callOnHoverIn, callOnHoverOut){
     scaleY = paths.scaleFactorY * this.containerH;
     translateX = paths.translateX;
     translateY = paths.translateY;
-    borderWidth = 1;
+    borderWidth = this.borderWidth;
 
     k = scaleFactor / containerScaleFactor;
     if(containerScaleFactor > scaleFactor){
